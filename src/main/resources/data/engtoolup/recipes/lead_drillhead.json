@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  S",
+    "SS ",
+    "LS "
+  ],
+  "key": {
+    "S": {
+      "item": "immersiveengineering:ingot_steel"
+    },
+    "L": {
+      "item": "immersiveengineering:storage_lead"
+    }
+  },
+  "result": {
+    "item": "engtoolup:lead_drillhead",
+    "count": 1
+  }
+}

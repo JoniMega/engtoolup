@@ -1,0 +1,4 @@
+Magnetic Drill Extender
+Reach a Little Further
+<&recipe>The Magnetic Drill Extender is a Drill upgrade, It adds a weighted, magnetically-extended attachment to the drill's housing, letting the wielder interact with and mine blocks slightly further away than they otherwise could.<np>
+§2Effect:§r While equipped, grants §2+5 blocks§r of block-interaction and mining reach.

@@ -1,0 +1,10 @@
+{
+  "engtoolup:prospector_box": {
+    "entry": "engtoolup:prospector_drillhead",
+    "page": 1
+  },
+  "engtoolup:steel_spring": {
+    "entry": "engtoolup:magnetic_drill_extender",
+    "page": 1
+  }
+}

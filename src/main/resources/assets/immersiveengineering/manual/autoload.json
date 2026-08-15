@@ -1,0 +1,15 @@
+{
+  "autoload_priority": 3,
+  "engineers_tool_upgrades": {
+    "category_weight": 45,
+    "entry_list": [
+      "engtoolup:storage_drill",
+      "engtoolup:magnetic_drill_extender",
+      "engtoolup:lead_drillhead",
+      "engtoolup:prospector_drillhead",
+      "engtoolup:flashlight",
+      "engtoolup:fluid_sensor",
+      "engtoolup:antiblast_plate"
+    ]
+  }
+}

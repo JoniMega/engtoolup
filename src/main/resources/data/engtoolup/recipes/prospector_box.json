@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SSS",
+    "CLC",
+    "SSS"
+  ],
+  "key": {
+    "L": {
+      "item": "immersiveengineering:component_electronic_adv"
+    },
+    "C": {
+      "item": "immersiveengineering:toolupgrade_railgun_capacitors"
+    },
+    "S": {
+      "item": "immersiveengineering:plate_lead"
+    }
+  },
+  "result": {
+    "item": "engtoolup:prospector_box",
+    "count": 1
+  }
+}

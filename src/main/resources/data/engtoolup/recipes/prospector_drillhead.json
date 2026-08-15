@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  S",
+    "SS ",
+    "PS "
+  ],
+  "key": {
+    "S": {
+      "item": "immersiveengineering:ingot_steel"
+    },
+    "P": {
+      "item": "engtoolup:prospector_box"
+    }
+  },
+  "result": {
+    "item": "engtoolup:prospector_drillhead",
+    "count": 1
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "immersiveengineering:capacitor_hv": {
+    "entry": "immersiveengineering:accumulators",
+    "page": 1
+  },
+  "immersiveengineering:heavy_engineering": {
+    "entry": "immersiveengineering:multiblocks",
+    "page": 1
+  },
+  "immersiveengineering:capacitor_lv": {
+    "entry": "immersiveengineering:accumulators",
+    "page": 1
+  },
+  "immersiveengineering:capacitor_mv": {
+    "entry": "immersiveengineering:accumulators",
+    "page": 1
+  },
+  "immersiveengineering:alloybrick": {
+    "entry": "immersiveengineering:alloykiln",
+    "page": 1
+  },
+  "immersiveengineering:dust_iron": {
+    "entry": "immersiveengineering:crusher",
+    "page": 1
+  },
+  "immersiveengineering:insulating_glass": {
+    "entry": "immersiveengineering:alloykiln",
+    "page": 3
+  },
+  "immersiveengineering:slab_insulating_glass": {
+    "entry": "immersiveengineering:alloykiln",
+    "page": 3
+  },
+  "immersiveengineering:dust_constantan": {
+    "entry": "immersiveengineering:alloys",
+    "page": 1
+  },
+  "immersiveengineering:dust_electrum": {
+    "entry": "immersiveengineering:alloys",
+    "page": 1
+  },
+  "immersiveengineering:dust_steel": {
+    "entry": "immersiveengineering:crusher",
+    "page": 1
+  },
+  "immersiveengineering:ingot_constantan": {
+    "entry": "immersiveengineering:alloys",
+    "page": 1
+  },
+  "immersiveengineering:ingot_electrum": {
+    "entry": "immersiveengineering:alloys",
+    "page": 1
+  },
+  "immersiveengineering:balloon": {
+    "entry": "immersiveengineering:balloon",
+    "page": 1
+  },
+  "immersiveengineering:minecart_woodenbarrel": {
+    "entry": "immersiveengineering:barrel",
+    "page": 1
+  },
+  "immersiveengineering:wooden_barrel": {
+    "entry": "immersiveengineering:barrel",
+    "page": 1
+  },
+  "immersiveengineering:blueprint": {
+    "entry": "immersiveengineering:blueprints",
+    "page": 1
+  },
+  "immersiveengineering:breaker_switch": {
+    "entry": "immersiveengineering:breaker",
+    "page": 1
+  },
+  "immersiveengineering:redstone_breaker": {
+    "entry": "immersiveengineering:breaker",
+    "page": 3
+  },
+  "immersiveengineering:empty_casing": {
+    "entry": "immersiveengineering:bullets",
+    "page": 2
+  },
+  "immersiveengineering:empty_shell": {
+    "entry": "immersiveengineering:bullets",
+    "page": 2
+  },
+  "immersiveengineering:buzzsaw": {
+    "entry": "immersiveengineering:buzzsaw",
+    "page": 1
+  },
+  "immersiveengineering:sawblade": {
+    "entry": "immersiveengineering:buzzsaw",
+    "page": 1
+  },
+  "immersiveengineering:wooden_grip": {
+    "entry": "immersiveengineering:buzzsaw",
+    "page": 1
+  },
+  "immersiveengineering:rockcutter": {
+    "entry": "immersiveengineering:buzzsaw",
+    "page": 1
+  },
+  "immersiveengineering:toolupgrade_drill_capacity": {
+    "entry": "immersiveengineering:mining_drill",
+    "page": 9
+  },
+  "immersiveengineering:toolupgrade_drill_lube": {
+    "entry": "immersiveengineering:mining_drill",
+    "page": 6
+  },
+  "immersiveengineering:charging_station": {
+    "entry": "immersiveengineering:charging_station",
+    "page": 1
+  },
+  "immersiveengineering:dust_saltpeter": {
+    "entry": "immersiveengineering:chemicals",
+    "page": 1
+  },
+  "immersiveengineering:dust_sulfur": {
+    "entry": "immersiveengineering:chemicals",
+    "page": 1
+  },
+  "immersiveengineering:fertilizer": {
+    "entry": "immersiveengineering:chemicals",
+    "page": 2
+  },
+  "immersiveengineering:chemthrower": {
+    "entry": "immersiveengineering:chemthrower",
+    "page": 1
+  }
+}

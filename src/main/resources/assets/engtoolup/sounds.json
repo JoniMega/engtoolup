@@ -1,0 +1,8 @@
+{
+  "lava_alarm": {
+    "category": "player",
+    "sounds": [
+      "engtoolup:lava_alarm"
+    ]
+  }
+}

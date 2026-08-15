@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "engtoolup:block/storage_drill"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "III",
+    "III",
+    "III"
+  ],
+  "key": {
+    "I": {
+      "item": "immersiveengineering:drill"
+    }
+  },
+  "result": {
+    "item": "engtoolup:storage_drill",
+    "count": 1
+  }
+}

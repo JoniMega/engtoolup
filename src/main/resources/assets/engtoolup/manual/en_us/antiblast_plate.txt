@@ -1,0 +1,7 @@
+Antiblast Plate
+Duck and Cover
+<&recipe>The Antiblast Plate is a Shield upgrade. It is built specifically to absorb the force of an explosion rather than a blade or a bullet.<np>
+Its effect only applies while you are actively blocking with the Shield; it does nothing while the Shield merely sits in your inventory or hotbar.<np>
+§2Explosion Damage:§r reduced by 80% while blocking
+§2Explosion Knockback:§r fully cancelled while blocking
+You won't be sent flying with this upgrade.

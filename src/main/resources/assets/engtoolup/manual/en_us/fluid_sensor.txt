@@ -1,0 +1,6 @@
+Fluid Sensor
+Know Before You Dig
+<&recipe>Nobody enjoys drilling straight into an open pocket of lava. The Fluid Sensor is a Drill upgrade that watches every block about to be mined, checking not just the targeted block but the drill's entire mining area for whichever drillhead is currently fitted, and sounds an alarm the instant any of it borders lava.<np>
+Because it checks the actual mining pattern rather than only the block you're looking at, it protects you correctly whether you're using a narrow head like the Lead Drillhead or a wide one like the Steel Drillhead's 3x3 area.
+The alarm is heard only by the wielder; it is not broadcast to other nearby players.<np>
+

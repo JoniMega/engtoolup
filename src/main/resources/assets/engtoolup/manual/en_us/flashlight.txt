@@ -1,0 +1,5 @@
+Flashlight
+Light the Way
+<&recipe>The Flashlight is an upgrade for both the Drill and the Heavy Plated Shield. It has no effect on its own if simply carried in your hand; it must be installed onto one of those two tools at the Engineer's Workbench.<np>
+Once installed, the Flashlight projects a beam of light out from the wielder's eyes in whatever direction they are looking, brightest up close and dimming with distance. It works for free the entire time it's equipped, with no Flux cost and nothing to run out of.<np>
+§2Beam Range:§r 8 blocks

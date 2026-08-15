@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "WLW",
+    "WLW",
+    "WLW"
+  ],
+  "key": {
+    "W": {
+      "item": "immersiveengineering:wire_steel"
+    },
+    "L": {
+      "item": "immersiveengineering:ingot_steel"
+    }
+  },
+  "result": {
+    "item": "engtoolup:steel_spring",
+    "count": 1
+  }
+}

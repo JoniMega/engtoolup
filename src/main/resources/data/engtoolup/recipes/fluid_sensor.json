@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "LLL",
+    "IEI",
+    "LCL"
+  ],
+  "key": {
+    "L": {
+      "item": "immersiveengineering:plate_lead"
+    },
+    "E": {
+      "item": "immersiveengineering:electron_tube"
+    },
+    "C": {
+      "item": "immersiveengineering:component_electronic"
+    },
+    "I": {
+      "item": "immersiveengineering:component_iron"
+    }
+  },
+  "result": {
+    "item": "engtoolup:fluid_sensor",
+    "count": 1
+  }
+}

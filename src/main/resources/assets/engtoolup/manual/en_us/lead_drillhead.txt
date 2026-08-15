@@ -1,0 +1,8 @@
+Lead Drillhead
+More Mass, More Power
+<&recipe>With its big less mass this Drillhead built for speed and damage rather than coverage. Where the Steel Drillhead carves out a wide 3x3 area with every pass, the Lead Drillhead narrows its focus to a single block, using the material saved to spin far faster than any standard head.<np>
+§2Mining Area:§r 1x1
+§2Mining Speed:§r 24.0
+§2Attack Damage:§r 12
+§2Durability:§r 5000
+§2Mining Level:§r Diamond

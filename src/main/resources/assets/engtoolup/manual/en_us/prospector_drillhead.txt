@@ -1,0 +1,8 @@
+Prospector Drillhead
+Handle With Care
+<&recipe>Like the Lead Drillhead, the Prospector Drillhead is a specialised tool that allows  every block it breaks is affected as though harvested with a §2Silk Touch§r enchanted tool.<np>
+§2Mining Area:§r 3x3
+§2Mining Speed:§r 10.0
+§2Attack Damage:§r 2
+§2Durability:§r 10000
+If Rock softening acid is equipped with Prospector Drillhead, the fortune effect will prevail over Silk touch effect of the DrillHead.

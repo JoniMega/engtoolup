@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " L ",
+    " B ",
+    " S "
+  ],
+  "key": {
+    "L": {
+      "item": "immersiveengineering:wire_lead"
+    },
+    "B": {
+      "item": "immersiveengineering:light_bulb"
+    },
+    "S": {
+      "item": "immersiveengineering:capacitor_lv"
+    }
+  },
+  "result": {
+    "item": "engtoolup:flashlight",
+    "count": 1
+  }
+}

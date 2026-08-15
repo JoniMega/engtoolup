@@ -1,0 +1,7 @@
+Block of Drills
+9 Drills, 9 times the power
+<&recipe>Nine fully assembled Drills, crammed edge to edge into a single block. It is exactly as impractical as that sounds. You could not disassemble this back into nine working Drills even if you wanted to, and there is no good reason to want to.<np>
+Did you know that internally, Immersive Engineering names all metallic blocks storage_metal? There is no such thing as "steel block" internally, it's always "storage_steel". Therefore, our engineers have decided that if 9 items in a crafting table make them a storage block, 9 drills should also make a storage of drills.<np>
+§2Hardness:§r 5.0
+§2Blast Resistance:§r 6.0
+Purely decorative. If you are looking for a structural or functional use for this block, there isn't one. You are wellcome.

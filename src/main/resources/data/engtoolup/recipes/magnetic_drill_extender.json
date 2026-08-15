@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "LSL",
+    "LEL",
+    "LRL"
+  ],
+  "key": {
+    "E": {
+      "item": "immersiveengineering:electromagnet"
+    },
+    "S": {
+      "item": "engtoolup:steel_spring"
+    },
+    "R": {
+      "item": "immersiveengineering:ingot_constantan"
+    },
+    "L": {
+      "item": "immersiveengineering:plate_lead"
+    }
+  },
+  "result": {
+    "item": "engtoolup:magnetic_drill_extender",
+    "count": 1
+  }
+}
