@@ -14,15 +14,15 @@
 
 ### Tool Upgrades
 
-- **Magnetic Drill Extender** - extends the reach/behavior of IE drills.
-- **Fluid Sensor** - detects nearby fluids.
-- **Antiblast Plate** - a defensive tool upgrade.
-- **Flashlight** - a handheld light source item.
+- **Magnetic Drill Extender** - extends the reach of IE drills.
+- **Fluid Sensor** - detects nearby lava.
+- **Antiblast Plate** - explosive knockback nullifier.
+- **Flashlight** - a dynamic light source for mining.
 
 ### Drill Heads
 
-- **Prospector Drillhead** - locate ores and resources while drilling.
-- **Lead Drillhead** - an alternative drillhead for the IE drill.
+- **Prospector Drillhead** - silk touch effect.
+- **Lead Drillhead** - cheaper, faster, 1x1 block mining area, more damage.
 
 ### QoL
 
