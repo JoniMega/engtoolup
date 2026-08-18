@@ -1,6 +1,6 @@
 package cat.joni.engtoolup.addons.magneticExtender;
 
-import blusunrize.immersiveengineering.api.tool.IUpgradeableTool;
+import blusunrize.immersiveengineering.api.tool.upgrade.IUpgradeableTool;
 import blusunrize.immersiveengineering.client.models.obj.callback.item.DrillCallbacks;
 import cat.joni.engtoolup.Engtoolup;
 import com.mojang.math.Transformation;
@@ -12,10 +12,10 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.tick.ClientTickEvent;
 import org.joml.Vector3f;
 
 import java.util.List;
@@ -26,7 +26,7 @@ import java.util.List;
  * mined, as well as some momentum if the player moves the cursor.
  * Also, there is an iddle movement where the drill head moves forward and backwards.
  */
-@Mod.EventBusSubscriber(modid = Engtoolup.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Engtoolup.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class MagneticDrillExtenderCallbacks extends DrillCallbacks
 {
     public static final MagneticDrillExtenderCallbacks INSTANCE = new MagneticDrillExtenderCallbacks();
@@ -54,11 +54,8 @@ public class MagneticDrillExtenderCallbacks extends DrillCallbacks
     private static float idleTicks = 0f;
 
     @SubscribeEvent
-    public static void onClientTick(TickEvent.ClientTickEvent event)
+    public static void onClientTick(ClientTickEvent.Post event)
     {
-        if(event.phase!=TickEvent.Phase.END)
-            return;
-
         idleTicks = (idleTicks+1f)%IDLE_WRAP;
 
         prevExtension = extension;

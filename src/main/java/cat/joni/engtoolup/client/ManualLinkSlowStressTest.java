@@ -8,14 +8,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RegisterClientCommandsEvent;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
+import net.neoforged.neoforge.event.tick.ClientTickEvent;
 import org.slf4j.Logger;
 
 import java.util.ArrayDeque;
@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid = Engtoolup.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Engtoolup.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class ManualLinkSlowStressTest
 {
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -64,7 +64,7 @@ public class ManualLinkSlowStressTest
         ManualLinkHandler.ensureManualIndexed();
 
         List<QueuedEntry> found = new ArrayList<>();
-        for(Item item : ForgeRegistries.ITEMS.getValues())
+        for(Item item : BuiltInRegistries.ITEM)
         {
             ItemStack stack = new ItemStack(item);
             if(stack.isEmpty())
@@ -78,7 +78,7 @@ public class ManualLinkSlowStressTest
             catch(Exception e)
             {
                 LOGGER.error("Manual stress test: failed to resolve a manual link for {}",
-                        ForgeRegistries.ITEMS.getKey(item), e);
+                        BuiltInRegistries.ITEM.getKey(item), e);
                 continue;
             }
 
@@ -138,9 +138,9 @@ public class ManualLinkSlowStressTest
     }
 
     @SubscribeEvent
-    public static void onClientTick(TickEvent.ClientTickEvent event)
+    public static void onClientTick(ClientTickEvent.Post event)
     {
-        if(event.phase!=TickEvent.Phase.END || !running)
+        if(!running)
             return;
 
         if(Minecraft.getInstance().level==null)
@@ -173,7 +173,7 @@ public class ManualLinkSlowStressTest
 
         opened++;
         LOGGER.info("[{}/{}] Opening manual entry for {}",
-                opened, total, ForgeRegistries.ITEMS.getKey(next.stack.getItem()));
+                opened, total, BuiltInRegistries.ITEM.getKey(next.stack.getItem()));
 
         try
         {
@@ -182,7 +182,7 @@ public class ManualLinkSlowStressTest
         catch(Exception e)
         {
             LOGGER.error("Manual stress test: failed to open manual entry for {}",
-                    ForgeRegistries.ITEMS.getKey(next.stack.getItem()), e);
+                    BuiltInRegistries.ITEM.getKey(next.stack.getItem()), e);
         }
 
         ticksUntilNext = DELAY_TICKS;

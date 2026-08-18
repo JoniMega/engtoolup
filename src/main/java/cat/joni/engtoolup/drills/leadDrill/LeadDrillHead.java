@@ -10,7 +10,7 @@ import net.minecraft.world.item.Tiers;
 @SuppressWarnings("removal")
 public class LeadDrillHead extends DrillheadItem {
     public LeadDrillHead() {
-        super(new DrillheadItem.DrillHeadPerm(
+        super(new DrillHeadPerm(
                 "lead",
                 IETags.getTagsFor(EnumMetals.LEAD).ingot,
                 1, // drillSize
@@ -19,7 +19,7 @@ public class LeadDrillHead extends DrillheadItem {
                 24.0f, // drillSpeed
                 12, // attack damage
                 5000, // max durability
-                new ResourceLocation("immersiveengineering", "item/drill_iron") // TO-DO new texture
+                ResourceLocation.fromNamespaceAndPath("immersiveengineering", "item/drill_iron") // TO-DO new texture
         ));
     }
 }

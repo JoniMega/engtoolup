@@ -5,25 +5,24 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.logging.LogUtils;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-@SuppressWarnings("removal")
-@Mod.EventBusSubscriber(modid = Engtoolup.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Engtoolup.MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ManualLinkOverrides extends SimpleJsonResourceReloadListener
 {
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -60,15 +59,15 @@ public class ManualLinkOverrides extends SimpleJsonResourceReloadListener
             for(Map.Entry<String, JsonElement> itemEntry : fileJson.entrySet()) {
                 String itemIdStr = itemEntry.getKey();
                 try {
-                    ResourceLocation itemId = new ResourceLocation(itemIdStr);
-                    Item item = ForgeRegistries.ITEMS.getValue(itemId);
+                    ResourceLocation itemId = ResourceLocation.parse(itemIdStr);
+                    Item item = BuiltInRegistries.ITEM.getValue(itemId);
                     if(item==null) {
                         LOGGER.warn("manual_links/{}.json targets unknown item {}, skipping", fileId, itemId);
                         continue;
                     }
 
                     JsonObject linkJson = itemEntry.getValue().getAsJsonObject();
-                    ResourceLocation entryId = new ResourceLocation(GsonHelper.getAsString(linkJson, "entry"));
+                    ResourceLocation entryId = ResourceLocation.parse(GsonHelper.getAsString(linkJson, "entry"));
                     int page = GsonHelper.getAsInt(linkJson, "page", 1);
                     if(page<1) {
                         LOGGER.warn(

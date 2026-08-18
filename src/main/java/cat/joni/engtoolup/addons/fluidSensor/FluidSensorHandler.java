@@ -1,7 +1,7 @@
 package cat.joni.engtoolup.addons.fluidSensor;
 
 import blusunrize.immersiveengineering.api.tool.IDrillHead;
-import blusunrize.immersiveengineering.api.tool.IUpgradeableTool;
+import blusunrize.immersiveengineering.api.tool.upgrade.IUpgradeableTool;
 import blusunrize.immersiveengineering.common.items.DrillItem;
 import cat.joni.engtoolup.Engtoolup;
 import cat.joni.engtoolup.registry.ModSounds;
@@ -17,10 +17,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.tick.ClientTickEvent;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -30,7 +30,7 @@ import java.util.Set;
  * There is a bug not addressed: There is a second function in the IE drill that shrinks its mining area to 1x1,
  * yet getExtraBlocksDug still returns its max drilling area.
  */
-@Mod.EventBusSubscriber(modid = Engtoolup.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Engtoolup.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class FluidSensorHandler
 {
     private static final int WARNING_INTERVAL_TICKS = 30; // 1.5s between repeat warnings while still near lava
@@ -38,11 +38,8 @@ public class FluidSensorHandler
     private static int cooldown = 0;
 
     @SubscribeEvent
-    public static void onClientTick(TickEvent.ClientTickEvent event)
+    public static void onClientTick(ClientTickEvent.Post event)
     {
-        if(event.phase!=TickEvent.Phase.END)
-            return;
-
         Minecraft mc = Minecraft.getInstance();
         LocalPlayer player = mc.player;
         ClientLevel level = mc.level;

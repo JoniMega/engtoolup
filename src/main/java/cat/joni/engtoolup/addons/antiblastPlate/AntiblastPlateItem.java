@@ -1,7 +1,8 @@
 package cat.joni.engtoolup.addons.antiblastPlate;
 
-import blusunrize.immersiveengineering.api.tool.IUpgrade;
-import blusunrize.immersiveengineering.api.tool.IUpgradeableTool;
+import blusunrize.immersiveengineering.api.tool.upgrade.IUpgrade;
+import blusunrize.immersiveengineering.api.tool.upgrade.IUpgradeableTool;
+import blusunrize.immersiveengineering.api.tool.upgrade.UpgradeData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -20,6 +21,16 @@ public class AntiblastPlateItem extends Item implements IUpgrade {
     @Override
     public Set<String> getUpgradeTypes(ItemStack itemStack) {
         return Set.of("SHIELD");
+    }
+
+    @Override
+    public boolean canApplyUpgrades(UpgradeData upgradeData, ItemStack itemStack) {
+        return false;
+    }
+
+    @Override
+    public UpgradeData applyUpgrades(UpgradeData upgradeData, ItemStack itemStack) {
+        return null;
     }
 
     @Override

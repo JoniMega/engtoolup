@@ -5,16 +5,15 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class ModCreativeTabs
 {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Engtoolup.MODID);
 
-    public static final RegistryObject<CreativeModeTab> ENGTOOLUP_TAB = CREATIVE_MODE_TABS.register("engtoolup_tab",
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> ENGTOOLUP_TAB = CREATIVE_MODE_TABS.register("engtoolup_tab",
             () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup.engtoolup"))
                     .icon(() -> new ItemStack(ModItems.FLASHLIGHT.get()))

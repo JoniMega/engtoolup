@@ -1,6 +1,6 @@
 package cat.joni.engtoolup.addons.flashlight;
 
-import blusunrize.immersiveengineering.api.tool.IUpgradeableTool;
+import blusunrize.immersiveengineering.api.tool.upgrade.IUpgradeableTool;
 import cat.joni.engtoolup.Engtoolup;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -12,13 +12,12 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LightBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -30,7 +29,7 @@ import java.util.Map;
  * Original Idea: generate a powerfull light at the end and place less powerfull lightsources in the middle.
  * Final implementation: just place a lightsource in every block in between the max distance and the player.
  */
-@Mod.EventBusSubscriber(modid = Engtoolup.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Engtoolup.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class FlashlightRenderer
 {
     private static final double MAX_DIST = 16.0;
@@ -41,11 +40,8 @@ public class FlashlightRenderer
     private static final Map<BlockPos, Integer> activeLights = new HashMap<>();
 
     @SubscribeEvent
-    public static void onClientTick(TickEvent.ClientTickEvent event)
+    public static void onClientTick(PlayerTickEvent.Post event)
     {
-        if(event.phase!=TickEvent.Phase.END)
-            return;
-
         Minecraft mc = Minecraft.getInstance();
         LocalPlayer player = mc.player;
         ClientLevel level = mc.level;
@@ -80,7 +76,7 @@ public class FlashlightRenderer
             return desired;
         }
 
-        int lightCount = Math.max(1, Math.min(MAX_LIGHTS, (int)Math.floor(dist)));
+        int lightCount = Math.clamp((int) Math.floor(dist), 1, MAX_LIGHTS);
         for(int k = 1; k <= lightCount; k++)
         {
             double stepDist = Math.min(k, dist);

@@ -1,7 +1,7 @@
 package cat.joni.engtoolup.addons.flashlight;
 
-import blusunrize.immersiveengineering.api.tool.IUpgrade;
-import blusunrize.immersiveengineering.api.tool.IUpgradeableTool;
+import blusunrize.immersiveengineering.api.tool.upgrade.IUpgrade;
+import blusunrize.immersiveengineering.api.tool.upgrade.IUpgradeableTool;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;

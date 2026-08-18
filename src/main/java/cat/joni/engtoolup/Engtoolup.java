@@ -7,25 +7,19 @@ import cat.joni.engtoolup.registry.ModCreativeTabs;
 import cat.joni.engtoolup.registry.ModItems;
 import cat.joni.engtoolup.registry.ModSounds;
 import com.mojang.logging.LogUtils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.server.ServerStartingEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.common.NeoForge;
 import org.slf4j.Logger;
 
-
-@SuppressWarnings("removal")
+// The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(Engtoolup.MODID)
 public class Engtoolup {
 
@@ -34,23 +28,21 @@ public class Engtoolup {
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public Engtoolup() {
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-
+    public Engtoolup(IEventBus modEventBus, ModContainer modContainer) {
         ModBlocks.BLOCKS.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
         ModSounds.SOUNDS.register(modEventBus);
         ModCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
 
-        MinecraftForge.EVENT_BUS.register(this);
+        NeoForge.EVENT_BUS.register(this);
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
 
 
     // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
-    @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents {
 
         @SubscribeEvent
@@ -59,7 +51,7 @@ public class Engtoolup {
             LOGGER.info("Overwriting IE's own \"immersiveengineering:drill\" entry");
 
             IEOBJCallbacks.register(
-                    new ResourceLocation("immersiveengineering", "drill"),
+                    ResourceLocation.fromNamespaceAndPath("immersiveengineering", "drill"),
                     MagneticDrillExtenderCallbacks.INSTANCE
             );
             LOGGER.info("Overwritten IE's - Maybe this should be removed or better implemented");

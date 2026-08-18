@@ -1,7 +1,8 @@
 package cat.joni.engtoolup.addons.magneticExtender;
 
-import blusunrize.immersiveengineering.api.tool.IUpgrade;
-import blusunrize.immersiveengineering.api.tool.IUpgradeableTool;
+import blusunrize.immersiveengineering.api.tool.upgrade.IUpgrade;
+import blusunrize.immersiveengineering.api.tool.upgrade.IUpgradeableTool;
+import blusunrize.immersiveengineering.api.tool.upgrade.UpgradeData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -21,6 +22,16 @@ public class MagneticDrillExtenderItem extends Item implements IUpgrade
     public Set<String> getUpgradeTypes(ItemStack upgrade)
     {
         return Set.of("DRILL");
+    }
+
+    @Override
+    public boolean canApplyUpgrades(UpgradeData upgradeData, ItemStack itemStack) {
+        return false;
+    }
+
+    @Override
+    public UpgradeData applyUpgrades(UpgradeData upgradeData, ItemStack itemStack) {
+        return null;
     }
 
     @Override

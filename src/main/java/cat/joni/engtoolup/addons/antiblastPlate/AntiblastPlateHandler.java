@@ -1,6 +1,6 @@
 package cat.joni.engtoolup.addons.antiblastPlate;
 
-import blusunrize.immersiveengineering.api.tool.IUpgradeableTool;
+import blusunrize.immersiveengineering.api.tool.upgrade.IUpgradeableTool;
 import blusunrize.immersiveengineering.common.items.IEShieldItem;
 import cat.joni.engtoolup.Engtoolup;
 import net.minecraft.tags.DamageTypeTags;
@@ -8,12 +8,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import com.mojang.logging.LogUtils;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import org.slf4j.Logger;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -24,7 +22,7 @@ import java.util.UUID;
  * By the way, I did not know that explosions did not make damage is blocked by shield. But the code was very easy and
  * it's done.
  */
-@Mod.EventBusSubscriber(modid = Engtoolup.MODID)
+@EventBusSubscriber(modid = Engtoolup.MODID)
 public class AntiblastPlateHandler
 {
     //private static final Logger LOGGER = LogUtils.getLogger();
@@ -34,7 +32,7 @@ public class AntiblastPlateHandler
     private static final Set<UUID> pendingKnockbackCancel = new HashSet<>();
 
     @SubscribeEvent
-    public static void onExplosionDamage(LivingHurtEvent event)
+    public static void onExplosionDamage(LivingDamageEvent.Pre event)
     {
 
         if(!event.getSource().is(DamageTypeTags.IS_EXPLOSION))
@@ -47,19 +45,16 @@ public class AntiblastPlateHandler
             return;
         }
 
-        event.setAmount(event.getAmount() * DAMAGE_MULTIPLIER_WHILE_BLOCKING); // 80% damage reduction on top of any other damage reductions
+        event.setNewDamage(event.getNewDamage() * DAMAGE_MULTIPLIER_WHILE_BLOCKING); // 80% damage reduction on top of any other damage reductions
 
         entity.setDeltaMovement(Vec3.ZERO); // Knockback 0
         pendingKnockbackCancel.add(entity.getUUID());
     }
 
     @SubscribeEvent
-    public static void onPlayerTick(TickEvent.PlayerTickEvent event)
+    public static void onPlayerTick(PlayerTickEvent.Post event)
     {
-        if(event.phase!=TickEvent.Phase.END)
-            return;
-
-        Player player = event.player;
+        Player player = event.getEntity();
         if(player.level().isClientSide())
             return;
 
