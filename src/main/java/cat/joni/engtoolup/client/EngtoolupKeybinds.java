@@ -7,9 +7,8 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 
-@EventBusSubscriber(modid = Engtoolup.MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-public class EngtoolupKeybinds
-{
+@EventBusSubscriber(modid = Engtoolup.MODID, value = Dist.CLIENT)
+public class EngtoolupKeybinds {
     public static final KeyMapping OPEN_MANUAL_ENTRY = new KeyMapping(
             "key.engtoolup.openManualEntry",
             -1,
@@ -17,12 +16,10 @@ public class EngtoolupKeybinds
     );
 
     @SubscribeEvent
-    public static void registerKeybinds(RegisterKeyMappingsEvent event)
-    {
+    public static void registerKeybinds(RegisterKeyMappingsEvent event) {
         event.register(OPEN_MANUAL_ENTRY);
     }
 
-    private EngtoolupKeybinds()
-    {
+    private EngtoolupKeybinds() {
     }
 }

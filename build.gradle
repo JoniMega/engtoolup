@@ -9,7 +9,10 @@ version = mod_version
 group = mod_group_id
 
 repositories {
-    maven { url 'https://www.cursemaven.com' }
+    //maven { url 'https://www.cursemaven.com' }
+    maven {	name = "BlameJared";	url = "https://maven.blamejared.com/" }			// IE & CrT Files
+    //maven { name = "DVS1 Maven FS"; url = "https://dvs1.progwml6.com/files/maven" }	// JEI & Tinkers Files
+    //maven { name = "CurseMaven";	url = 'https://cfa2.cursemaven.com' }			// Needed for PNC
     mavenLocal()
 }
 
@@ -117,7 +120,17 @@ dependencies {
     // For more info:
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
-    implementation "curse.maven:immersive-engineering-231951:6733669"
+    implementation "blusunrize.immersiveengineering:ImmersiveEngineering:1.21.1-12.4.2-194"
+    //implementation "curse.maven:immersive-engineering-231951:6733669"
+
+    // IE jarJars malte0811's DualCodecs library in for its own runtime use (embedded in META-INF/jarjar inside the
+    // IE jar), but that embedding does NOT put DualCodecs on our compile classpath -- the published IE POM has no
+    // <dependency> entries at all, jarJar deps are runtime-only mod-loading concerns, not Gradle compile deps.
+    // Since IE's UpgradeEffect/UpgradeData API (blusunrize.immersiveengineering.api.tool.upgrade) is typed on top
+    // of DualCodecs, we need it directly to reference UpgradeEffect/DualCodec when defining our own upgrade
+    // effects. compileOnly because the actual class is supplied at runtime by IE's own jar-in-jar -- we must not
+    // bundle a second copy.
+    compileOnly "malte0811:DualCodecs:0.1.2"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

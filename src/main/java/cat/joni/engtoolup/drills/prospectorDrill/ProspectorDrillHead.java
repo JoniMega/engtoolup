@@ -6,7 +6,6 @@ import blusunrize.immersiveengineering.common.items.DrillheadItem;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Tiers;
 
-@SuppressWarnings("removal")
 public class ProspectorDrillHead extends DrillheadItem {
     public ProspectorDrillHead() {
         super(new DrillHeadPerm(

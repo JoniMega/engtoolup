@@ -8,8 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-public class ModCreativeTabs
-{
+public class ModCreativeTabs {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Engtoolup.MODID);
 
@@ -30,7 +29,6 @@ public class ModCreativeTabs
                     })
                     .build());
 
-    private ModCreativeTabs()
-    {
+    private ModCreativeTabs() {
     }
 }

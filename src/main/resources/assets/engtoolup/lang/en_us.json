@@ -1,5 +1,17 @@
 {
-  "itemGroup.engtoolup": "Example Mod Tab",
-  "block.engtoolup.example_block": "Example Block",
-  "item.engtoolup.example_item": "Example Item"
+  "block.engtoolup.storage_drill": "Block of Drills",
+  "item.engtoolup.magnetic_drill_extender": "Magnetic Drill Extender",
+  "item.engtoolup.steel_spring": "Steel Spring",
+  "item.engtoolup.lead_drillhead": "Lead Drillhead",
+  "item.engtoolup.prospector_box": "Prospector Box",
+  "item.engtoolup.prospector_drillhead": "Prospector Drillhead",
+  "item.engtoolup.flashlight": "Flashlight",
+  "item.engtoolup.fluid_sensor": "Fluid Sensor",
+  "item.engtoolup.antiblast_plate": "Antiblast Plate",
+  "itemGroup.engtoolup": "Engineer's Tool Upgrades",
+  "manual.immersiveengineering.engineers_tool_upgrades": "Engineer's Tool Upgrades",
+  "key.categories.engtoolup": "Engineer's Tool Upgrades",
+  "key.engtoolup.openManualEntry": "Open Manual Entry",
+  "tooltip.engtoolup.openManualEntry": "Hold %s to inspect",
+  "tooltip.engtoolup.noKeyToManual": "Set a KEYBIND to inspect"
 }

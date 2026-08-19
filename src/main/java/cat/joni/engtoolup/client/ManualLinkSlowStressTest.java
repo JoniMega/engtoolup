@@ -15,7 +15,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
-import net.neoforged.neoforge.event.tick.ClientTickEvent;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import org.slf4j.Logger;
 
 import java.util.ArrayDeque;
@@ -23,9 +23,8 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
-@EventBusSubscriber(modid = Engtoolup.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
-public class ManualLinkSlowStressTest
-{
+@EventBusSubscriber(modid = Engtoolup.MODID, value = Dist.CLIENT)
+public class ManualLinkSlowStressTest {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     private static final int DELAY_TICKS = 5;
@@ -37,8 +36,7 @@ public class ManualLinkSlowStressTest
     private static int opened = 0;
 
     @SubscribeEvent
-    public static void onRegisterClientCommands(RegisterClientCommandsEvent event)
-    {
+    public static void onRegisterClientCommands(RegisterClientCommandsEvent event) {
         event.getDispatcher().register(
                 Commands.literal("engtoolup")
                         .then(Commands.literal("manualstresstest")
@@ -48,14 +46,12 @@ public class ManualLinkSlowStressTest
         );
     }
 
-    private static int start(CommandContext<CommandSourceStack> ctx)
-    {
+    private static int start(CommandContext<CommandSourceStack> ctx) {
         CommandSourceStack source = ctx.getSource();
 
-        if(running)
-        {
+        if (running) {
             source.sendFailure(Component.literal(
-                    "A manual stress test is already running ("+opened+"/"+total+"). "+
+                    "A manual stress test is already running (" + opened + "/" + total + "). " +
                             "Use \"/engtoolup manualstresstest stop\" to cancel it first."
             ));
             return 0;
@@ -64,30 +60,25 @@ public class ManualLinkSlowStressTest
         ManualLinkHandler.ensureManualIndexed();
 
         List<QueuedEntry> found = new ArrayList<>();
-        for(Item item : BuiltInRegistries.ITEM)
-        {
+        for (Item item : BuiltInRegistries.ITEM) {
             ItemStack stack = new ItemStack(item);
-            if(stack.isEmpty())
+            if (stack.isEmpty())
                 continue;
 
             ManualLink link;
-            try
-            {
+            try {
                 link = ManualLinkHandler.resolveLink(stack);
-            }
-            catch(Exception e)
-            {
+            } catch (Exception e) {
                 LOGGER.error("Manual stress test: failed to resolve a manual link for {}",
                         BuiltInRegistries.ITEM.getKey(item), e);
                 continue;
             }
 
-            if(link!=null)
+            if (link != null)
                 found.add(new QueuedEntry(stack, link));
         }
 
-        if(found.isEmpty())
-        {
+        if (found.isEmpty()) {
             source.sendFailure(Component.literal(
                     "No items with a resolvable manual entry were found. Is the Engineer's Manual loaded?"
             ));
@@ -103,19 +94,17 @@ public class ManualLinkSlowStressTest
 
         LOGGER.info("Manual stress test started: {} item(s) with a manual entry, {} ticks apart", total, DELAY_TICKS);
         source.sendSuccess(() -> Component.literal(
-                "Manual stress test started: "+total+" item(s) with a manual entry, "+DELAY_TICKS+" ticks apart. "+
+                "Manual stress test started: " + total + " item(s) with a manual entry, " + DELAY_TICKS + " ticks apart. " +
                         "Watch the log for progress."
         ), false);
 
         return 1;
     }
 
-    private static int stop(CommandContext<CommandSourceStack> ctx)
-    {
+    private static int stop(CommandContext<CommandSourceStack> ctx) {
         CommandSourceStack source = ctx.getSource();
 
-        if(!running)
-        {
+        if (!running) {
             source.sendFailure(Component.literal("No manual stress test is currently running."));
             return 0;
         }
@@ -125,46 +114,40 @@ public class ManualLinkSlowStressTest
         cancel();
 
         source.sendSuccess(() -> Component.literal(
-                "Manual stress test cancelled after "+openedSoFar+"/"+totalCount+" entries."
+                "Manual stress test cancelled after " + openedSoFar + "/" + totalCount + " entries."
         ), false);
         return 1;
     }
 
-    private static void cancel()
-    {
+    private static void cancel() {
         running = false;
         queue.clear();
         ticksUntilNext = 0;
     }
 
     @SubscribeEvent
-    public static void onClientTick(ClientTickEvent.Post event)
-    {
-        if(!running)
+    public static void onClientTick(ClientTickEvent.Post event) {
+        if (!running)
             return;
 
-        if(Minecraft.getInstance().level==null)
-        {
+        if (Minecraft.getInstance().level == null) {
             // Bailed out of the world mid-run (disconnected, closed the game to the title screen, etc.)
             cancel();
             return;
         }
 
-        if(ticksUntilNext>0)
-        {
+        if (ticksUntilNext > 0) {
             ticksUntilNext--;
             return;
         }
 
         QueuedEntry next = queue.poll();
-        if(next==null)
-        {
+        if (next == null) {
             LOGGER.info("Manual stress test finished: opened {}/{} entries", opened, total);
             var player = Minecraft.getInstance().player;
-            if(player!=null)
-            {
+            if (player != null) {
                 player.displayClientMessage(Component.literal(
-                        "Manual stress test finished: opened "+opened+"/"+total+" entries."
+                        "Manual stress test finished: opened " + opened + "/" + total + " entries."
                 ), false);
             }
             cancel();
@@ -175,12 +158,9 @@ public class ManualLinkSlowStressTest
         LOGGER.info("[{}/{}] Opening manual entry for {}",
                 opened, total, BuiltInRegistries.ITEM.getKey(next.stack.getItem()));
 
-        try
-        {
+        try {
             ManualLinkHandler.openLink(next.link);
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             LOGGER.error("Manual stress test: failed to open manual entry for {}",
                     BuiltInRegistries.ITEM.getKey(next.stack.getItem()), e);
         }
@@ -188,11 +168,9 @@ public class ManualLinkSlowStressTest
         ticksUntilNext = DELAY_TICKS;
     }
 
-    private record QueuedEntry(ItemStack stack, ManualLink link)
-    {
+    private record QueuedEntry(ItemStack stack, ManualLink link) {
     }
 
-    private ManualLinkSlowStressTest()
-    {
+    private ManualLinkSlowStressTest() {
     }
 }

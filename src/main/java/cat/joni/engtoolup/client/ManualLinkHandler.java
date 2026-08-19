@@ -16,29 +16,29 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ScreenEvent;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
-import net.neoforged.neoforge.event.tick.ClientTickEvent;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import org.slf4j.Logger;
 
 /**
  * This feature I hope gets implemented into IE. My implementations is a long patchwork replicating what create does.
- *
+ * <p>
  * This creates a Tooltip to all items listed in assets/engtoolup/manual_links and items that are referenced in the
  * manual.
- *
+ * <p>
  * Holding the KEYBIND should change the Tooltip to a loading bar and then opens the manual.
  */
-@EventBusSubscriber(modid = Engtoolup.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
-public class ManualLinkHandler
-{
+@EventBusSubscriber(modid = Engtoolup.MODID, value = Dist.CLIENT)
+public class ManualLinkHandler {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     private static final long HOLD_DURATION_MS = 1000;
     private static final int BAR_LENGTH = 10;
 
-    // Building the manual's GUI for the first time makes IE index every entry, including multiblock structure
-    // templates. On a freshly created world this can race against the integrated server finishing its own setup
-    // (see the "Template ... does not exist!" RuntimeException), so a single failed attempt doesn't necessarily
-    // mean the manual is unusable -- it's worth retrying a few times before giving up for the session.
+//    Building the manual's GUI for the first time makes IE index every entry, including multiblock structure
+//    templates. On a freshly created world this can race against the integrated server finishing its own setup
+//    (see the "Template ... does not exist!" RuntimeException), so a single failed attempt doesn't necessarily
+//    mean the manual is unusable. It's worth retrying a few times before giving up for the session.
+
     private static final int RETRY_INTERVAL_TICKS = 40; // 2 seconds
     private static final int MAX_INIT_ATTEMPTS = 10; // ~20 seconds of retrying, after the immediate first try
 
@@ -56,18 +56,17 @@ public class ManualLinkHandler
     private static boolean pendingOpen = false;
     private static ManualLink pendingLink = null;
 
-    static ManualLink resolveLink(ItemStack stack)
-    {
-        if(!manualInitSucceeded)
+    static ManualLink resolveLink(ItemStack stack) {
+        if (!manualInitSucceeded)
             return null;
 
         ManualInstance manual = ManualHelper.getManual();
 
         ManualLinkOverrides.LinkOverride override = ManualLinkOverrides.getOverride(stack.getItem());
-        if(override!=null) {
+        if (override != null) {
             ManualEntry overrideEntry = manual.getEntry(override.entry());
-            if(overrideEntry!=null) {
-                return new ManualLink(overrideEntry, null, override.page()-1);
+            if (overrideEntry != null) {
+                return new ManualLink(overrideEntry, null, override.page() - 1);
             }
             LOGGER.warn(
                     "Manual_links override for {} points at unknown manual entry {}",
@@ -83,13 +82,11 @@ public class ManualLinkHandler
      * world, then attempts to build/fetch the manual's GUI immediately and, if that fails, retries every
      * {@link #RETRY_INTERVAL_TICKS} ticks up to {@link #MAX_INIT_ATTEMPTS} times before giving up for the session.
      */
-    static void ensureManualIndexed()
-    {
-        if(manualInitSucceeded || manualInitGaveUp)
+    static void ensureManualIndexed() {
+        if (manualInitSucceeded || manualInitGaveUp)
             return;
 
-        if(ticksSinceLastAttempt < RETRY_INTERVAL_TICKS)
-        {
+        if (ticksSinceLastAttempt < RETRY_INTERVAL_TICKS) {
             ticksSinceLastAttempt++;
             return;
         }
@@ -98,31 +95,27 @@ public class ManualLinkHandler
 
         Minecraft mc = Minecraft.getInstance();
         LOGGER.info(
-                "Attempting to initialize the Engineer's Manual for page-linking (attempt {}/{}, level={}, "+
+                "Attempting to initialize the Engineer's Manual for page-linking (attempt {}/{}, level={}, " +
                         "connection={}, world time={} ticks)",
                 manualInitAttempts, MAX_INIT_ATTEMPTS,
-                mc.level==null ? "null" : mc.level.dimension().location(),
-                mc.getConnection()!=null,
-                mc.level==null ? -1 : mc.level.getGameTime()
+                mc.level == null ? "null" : mc.level.dimension().location(),
+                mc.getConnection() != null,
+                mc.level == null ? -1 : mc.level.getGameTime()
         );
 
-        boolean lastAttempt = manualInitAttempts>=MAX_INIT_ATTEMPTS;
+        boolean lastAttempt = manualInitAttempts >= MAX_INIT_ATTEMPTS;
 
         ManualInstance manual;
-        try
-        {
+        try {
             manual = ManualHelper.getManual();
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             logInitFailure("ManualHelper.getManual() threw", e, lastAttempt);
             return;
         }
 
-        if(manual==null)
-        {
+        if (manual == null) {
             logInitFailure(
-                    "ManualHelper.getManual() returned null. This usually means Immersive Engineering hasn't "+
+                    "ManualHelper.getManual() returned null. This usually means Immersive Engineering hasn't " +
                             "finished its own client setup yet",
                     null, lastAttempt
             );
@@ -131,11 +124,9 @@ public class ManualLinkHandler
 
         LOGGER.info("ManualHelper.getManual() returned {}, now building/fetching its GUI (manual.getGui())", manual);
 
-        try
-        {
+        try {
             var gui = manual.getGui();
-            if(gui==null)
-            {
+            if (gui == null) {
                 logInitFailure("manual.getGui() returned null", null, lastAttempt);
                 return;
             }
@@ -145,77 +136,67 @@ public class ManualLinkHandler
                     "Engineer's Manual initialized successfully for page-linking after {} attempt(s) (gui={})",
                     manualInitAttempts, gui
             );
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             logInitFailure("manual.getGui() threw", e, lastAttempt);
         }
     }
 
-    private static void logInitFailure(String reason, Exception e, boolean lastAttempt)
-    {
+    private static void logInitFailure(String reason, Exception e, boolean lastAttempt) {
         manualInitSucceeded = false;
 
-        if(lastAttempt)
-        {
+        if (lastAttempt) {
             manualInitGaveUp = true;
             String message =
-                    "Failed to initialize the Engineer's Manual for page-linking after "+manualInitAttempts+
-                            " attempt(s): "+reason+". Giving up for this session -- manual links will be "+
+                    "Failed to initialize the Engineer's Manual for page-linking after " + manualInitAttempts +
+                            " attempt(s): " + reason + ". Giving up for this session -- manual links will be " +
                             "unavailable until the world is rejoined.";
-            if(e!=null)
+            if (e != null)
                 LOGGER.error(message, e);
             else
                 LOGGER.error(message);
-        }
-        else
-        {
+        } else {
             // Likely just IE/the integrated server not being fully ready yet -- log briefly and let the next
             // retry (in RETRY_INTERVAL_TICKS) try again. Include the full stack trace on the very first failure
             // only, so we still capture diagnostics without spamming the log on every retry.
             String message =
-                    "Attempt "+manualInitAttempts+"/"+MAX_INIT_ATTEMPTS+
-                            " to initialize the Engineer's Manual for page-linking failed: "+reason+
-                            ". Will retry in "+RETRY_INTERVAL_TICKS+" ticks.";
-            if(e!=null)
-            {
-                if(manualInitAttempts==1)
+                    "Attempt " + manualInitAttempts + "/" + MAX_INIT_ATTEMPTS +
+                            " to initialize the Engineer's Manual for page-linking failed: " + reason +
+                            ". Will retry in " + RETRY_INTERVAL_TICKS + " ticks.";
+            if (e != null) {
+                if (manualInitAttempts == 1)
                     LOGGER.warn(message, e);
                 else
                     LOGGER.warn("{} ({}: {})", message, e.getClass().getName(), e.getMessage());
-            }
-            else
-            {
+            } else {
                 LOGGER.warn(message);
             }
         }
     }
 
     @SubscribeEvent
-    public static void onTooltip(ItemTooltipEvent event)
-    {
+    public static void onTooltip(ItemTooltipEvent event) {
         ItemStack stack = event.getItemStack();
         hoveredStack = stack;
 
-        if(isHolding && !ItemStack.matches(stack, holdTargetStack))
+        if (isHolding && !ItemStack.matches(stack, holdTargetStack))
             isHolding = false;
 
         ManualLink link = resolveLink(stack);
-        if(link==null)
+        if (link == null)
             return;
 
-        if(isHolding) {
+        if (isHolding) {
             long elapsed = System.currentTimeMillis() - holdStartTimeMillis;
-            float fraction = Math.min(1.0f, elapsed/(float)HOLD_DURATION_MS);
+            float fraction = Math.min(1.0f, elapsed / (float) HOLD_DURATION_MS);
 
-            if(fraction >= 1.0f) {
+            if (fraction >= 1.0f) {
                 pendingOpen = true;
                 pendingLink = link;
                 isHolding = false;
             } else {
                 event.getToolTip().add(Component.literal(buildProgressBar(fraction)));
             }
-        } else if(!EngtoolupKeybinds.OPEN_MANUAL_ENTRY.isUnbound()) {
+        } else if (!EngtoolupKeybinds.OPEN_MANUAL_ENTRY.isUnbound()) {
             event.getToolTip().add(Component.translatable(
                     "tooltip.engtoolup.openManualEntry",
                     EngtoolupKeybinds.OPEN_MANUAL_ENTRY.getTranslatedKeyMessage()
@@ -227,29 +208,27 @@ public class ManualLinkHandler
         }
     }
 
-    private static String buildProgressBar(float fraction)
-    {
-        int filled = Math.max(0, Math.min(BAR_LENGTH, Math.round(fraction*BAR_LENGTH)));
+    private static String buildProgressBar(float fraction) {
+        int filled = Math.max(0, Math.min(BAR_LENGTH, Math.round(fraction * BAR_LENGTH)));
         StringBuilder bar = new StringBuilder();
         bar.append(ChatFormatting.GREEN);
         bar.append("|".repeat(filled));
         bar.append(ChatFormatting.DARK_GRAY);
-        bar.append(":".repeat(BAR_LENGTH-filled));
+        bar.append(":".repeat(BAR_LENGTH - filled));
         return bar.toString();
     }
 
     @SubscribeEvent
-    public static void onScreenKeyPressed(ScreenEvent.KeyPressed.Pre event)
-    {
-        if(!EngtoolupKeybinds.OPEN_MANUAL_ENTRY.matches(event.getKeyCode(), event.getScanCode()))
+    public static void onScreenKeyPressed(ScreenEvent.KeyPressed.Pre event) {
+        if (!EngtoolupKeybinds.OPEN_MANUAL_ENTRY.matches(event.getKeyCode(), event.getScanCode()))
             return;
 
-        if(isHolding) {
+        if (isHolding) {
             event.setCanceled(true);
             return;
         }
 
-        if(resolveLink(hoveredStack)==null)
+        if (resolveLink(hoveredStack) == null)
             return; // nothing to inspect right now
 
         isHolding = true;
@@ -259,19 +238,16 @@ public class ManualLinkHandler
     }
 
     @SubscribeEvent
-    public static void onScreenKeyReleased(ScreenEvent.KeyReleased.Pre event)
-    {
-        if(!EngtoolupKeybinds.OPEN_MANUAL_ENTRY.matches(event.getKeyCode(), event.getScanCode()))
+    public static void onScreenKeyReleased(ScreenEvent.KeyReleased.Pre event) {
+        if (!EngtoolupKeybinds.OPEN_MANUAL_ENTRY.matches(event.getKeyCode(), event.getScanCode()))
             return;
         isHolding = false;
     }
 
     @SubscribeEvent
-    public static void onClientTick(ClientTickEvent.Post event)
-    {
-        boolean levelPresent = Minecraft.getInstance().level!=null;
-        if(levelPresent && !wasLevelPresent)
-        {
+    public static void onClientTick(ClientTickEvent.Post event) {
+        boolean levelPresent = Minecraft.getInstance().level != null;
+        if (levelPresent && !wasLevelPresent) {
             // (Re)joined a world -- reset retry state so a fresh world gets its own full set of attempts instead
             // of inheriting a previous world's "gave up" state.
             manualInitSucceeded = false;
@@ -281,37 +257,35 @@ public class ManualLinkHandler
         }
         wasLevelPresent = levelPresent;
 
-        if(levelPresent)
+        if (levelPresent)
             ensureManualIndexed();
 
-        if(!pendingOpen)
+        if (!pendingOpen)
             return;
         pendingOpen = false;
 
         ManualLink link = pendingLink;
         pendingLink = null;
-        if(link==null)
+        if (link == null)
             return;
 
         openLink(link);
     }
 
-    static void openLink(ManualLink link)
-    {
+    static void openLink(ManualLink link) {
         try {
             ManualInstance manual = ManualHelper.getManual();
             var screen = manual.getGui();
-            if(screen==null)
+            if (screen == null)
                 return;
 
             Minecraft.getInstance().setScreen(screen);
             link.changePage(screen, false);
-        } catch(Exception e) {
+        } catch (Exception e) {
             LOGGER.error("Failed to open the Engineer's Manual to a specific page ", e);
         }
     }
 
-    private ManualLinkHandler()
-    {
+    private ManualLinkHandler() {
     }
 }

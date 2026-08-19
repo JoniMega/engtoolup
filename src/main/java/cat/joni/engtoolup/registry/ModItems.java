@@ -12,8 +12,7 @@ import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-public class ModItems
-{
+public class ModItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Engtoolup.MODID);
 
     public static final DeferredItem<Item> STORAGE_DRILL_ITEM = ITEMS.register("storage_drill",
@@ -43,7 +42,6 @@ public class ModItems
     public static final DeferredItem<Item> ANTIBLAST_PLATE = ITEMS.register("antiblast_plate",
             () -> new AntiblastPlateItem(new Item.Properties()));
 
-    private ModItems()
-    {
+    private ModItems() {
     }
 }

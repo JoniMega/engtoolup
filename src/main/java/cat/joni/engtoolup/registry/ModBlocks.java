@@ -8,8 +8,7 @@ import net.minecraft.world.level.material.MapColor;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-public class ModBlocks
-{
+public class ModBlocks {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Engtoolup.MODID);
 
     public static final DeferredBlock<Block> STORAGE_DRILL = BLOCKS.register("storage_drill",
@@ -19,7 +18,6 @@ public class ModBlocks
                     .requiresCorrectToolForDrops()
                     .sound(SoundType.METAL)));
 
-    private ModBlocks()
-    {
+    private ModBlocks() {
     }
 }
