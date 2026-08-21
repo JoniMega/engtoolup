@@ -17,7 +17,7 @@ public class FluidSensorItem extends Item implements IUpgrade {
             new UpgradeEffect<>("engtoolup_fluid_sensor", DualCodecs.unit(Unit.INSTANCE), Unit.INSTANCE);
 
     public FluidSensorItem(Properties properties) {
-        super(properties);
+        super(properties.stacksTo(1));
     }
 
     @Override

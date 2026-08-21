@@ -16,7 +16,7 @@ public class MagneticDrillExtenderItem extends Item implements IUpgrade {
             new UpgradeEffect<>("engtoolup_reach", DualCodecs.unit(Unit.INSTANCE), Unit.INSTANCE);
 
     public MagneticDrillExtenderItem(Properties properties) {
-        super(properties);
+        super(properties.stacksTo(1));
     }
 
     @Override

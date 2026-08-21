@@ -21,8 +21,8 @@ public class AntiblastPlateItem extends Item implements IUpgrade {
     public static final UpgradeEffect<Unit> UPGRADE_KEY =
             new UpgradeEffect<>("engtoolup_antiblast_plate", DualCodecs.unit(Unit.INSTANCE), Unit.INSTANCE);
 
-    public AntiblastPlateItem(Properties p_41383_) {
-        super(p_41383_);
+    public AntiblastPlateItem(Properties properties) {
+        super(properties.stacksTo(1));
     }
 
     @Override

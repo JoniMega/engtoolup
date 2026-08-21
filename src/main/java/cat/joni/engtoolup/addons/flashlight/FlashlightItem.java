@@ -17,7 +17,7 @@ public class FlashlightItem extends Item implements IUpgrade {
             new UpgradeEffect<>("engtoolup_flashlight", DualCodecs.unit(Unit.INSTANCE), Unit.INSTANCE);
 
     public FlashlightItem(Properties properties) {
-        super(properties);
+        super(properties.stacksTo(1));
     }
 
     @Override
