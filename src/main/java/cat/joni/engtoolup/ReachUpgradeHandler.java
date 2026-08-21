@@ -17,7 +17,6 @@ public class ReachUpgradeHandler {
     //This is nuts, there has to be a more intended way to do it
     private static final ResourceLocation REACH_MODIFIER_ID =
             ResourceLocation.fromNamespaceAndPath(Engtoolup.MODID, "auger_guide_wire_reach");
-    private static final double REACH_BONUS = 5.0D;
 
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
@@ -28,10 +27,13 @@ public class ReachUpgradeHandler {
 
         boolean shouldHaveBonus = hasReachUpgrade(player.getMainHandItem()) || hasReachUpgrade(player.getOffhandItem());
         AttributeModifier existing = reach.getModifier(REACH_MODIFIER_ID);
+        double bonus = Config.magneticDrillExtenderReachBonus;
 
-        if (shouldHaveBonus && existing == null) {
+        if (shouldHaveBonus && (existing == null || existing.amount() != bonus)) {
+            if (existing != null)
+                reach.removeModifier(REACH_MODIFIER_ID);
             reach.addTransientModifier(new AttributeModifier(
-                    REACH_MODIFIER_ID, REACH_BONUS, AttributeModifier.Operation.ADD_VALUE
+                    REACH_MODIFIER_ID, bonus, AttributeModifier.Operation.ADD_VALUE
             ));
         } else if (!shouldHaveBonus && existing != null) {
             reach.removeModifier(REACH_MODIFIER_ID);
