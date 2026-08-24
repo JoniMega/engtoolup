@@ -3,18 +3,18 @@
   "pattern": [
     "  S",
     "SS ",
-    "PS "
+    "LS "
   ],
   "key": {
     "S": {
       "item": "immersiveengineering:ingot_steel"
     },
-    "P": {
-      "item": "engtoolup:prospector_box"
+    "L": {
+      "item": "immersiveengineering:storage_lead"
     }
   },
   "result": {
-    "item": "engtoolup:prospector_drillhead",
+    "id": "engtoolup:lead_drillhead",
     "count": 1
   }
 }
