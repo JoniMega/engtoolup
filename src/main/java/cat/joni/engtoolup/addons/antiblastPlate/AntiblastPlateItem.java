@@ -14,10 +14,6 @@ import java.util.Set;
 
 public class AntiblastPlateItem extends Item implements IUpgrade {
 
-    // IE 1.21.1 replaced the old CompoundTag-flag upgrade system with a typed UpgradeEffect/UpgradeData system
-    // (see blusunrize.immersiveengineering.api.tool.upgrade). Every custom upgrade flag now needs its own
-    // UpgradeEffect instance instead of a raw NBT key -- this mirrors how UpgradeEffect.unit(...) is built
-    // internally by IE (that helper itself is private, so we replicate it here).
     public static final UpgradeEffect<Unit> UPGRADE_KEY =
             new UpgradeEffect<>("engtoolup_antiblast_plate", DualCodecs.unit(Unit.INSTANCE), Unit.INSTANCE);
 

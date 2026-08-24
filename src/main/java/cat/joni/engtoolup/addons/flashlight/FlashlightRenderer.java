@@ -25,7 +25,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * There is so much deprecated/rubbish code here. Pending of cleaning this absolute mess.
  * Original Idea: generate a powerfull light at the end and place less powerfull lightsources in the middle.
  * Final implementation: just place a lightsource in every block in between the max distance and the player.
  */
