@@ -6,8 +6,6 @@
 
 ## Requirements
 
-- Minecraft **1.20.1**
-- Minecraft Forge **47.4.22+**
 - Immersive Engineering (required dependency)
 
 ## Features
@@ -27,13 +25,6 @@
 ### QoL
 
 - **Inspect any item** - Any item that has a presence in the IE's manual, will link to the specific page when the player holds the keybind while hovering, with teh cursor, the item.
-
-## Installation
-
-1. Install [Minecraft Forge](https://files.minecraftforge.net/) 47.4.22 or newer for Minecraft 1.20.1.
-2. Install [Immersive Engineering](https://github.com/BluSunrize/ImmersiveEngineering).
-3. Download the latest `engtoolup` jar from Modrinth or Curseforge.
-4. Drop the jar into your `mods` folder.
 
 ## License
 
