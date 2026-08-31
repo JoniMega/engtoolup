@@ -13,8 +13,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-public class ModItems
-{
+public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Engtoolup.MODID);
 
     public static final RegistryObject<Item> STORAGE_DRILL_ITEM = ITEMS.register("storage_drill",
@@ -44,7 +43,6 @@ public class ModItems
     public static final RegistryObject<Item> ANTIBLAST_PLATE = ITEMS.register("antiblast_plate",
             () -> new AntiblastPlateItem(new Item.Properties()));
 
-    private ModItems()
-    {
+    private ModItems() {
     }
 }

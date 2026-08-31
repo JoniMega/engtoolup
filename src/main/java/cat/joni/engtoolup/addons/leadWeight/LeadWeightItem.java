@@ -8,9 +8,9 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.Set;
 
-/** WORK IN PROGRESS
- *
- *  This is meant to be an upgrade for a boots armor. Forcing the player to sink fast, instead of sinking slowly
+/**
+ * WORK IN PROGRESS
+ * This is meant to be an upgrade for a boots armor. Forcing the player to sink fast, instead of sinking slowly
  **/
 
 public class LeadWeightItem extends Item implements IUpgrade {

@@ -25,8 +25,7 @@ import java.util.UUID;
  * it's done.
  */
 @Mod.EventBusSubscriber(modid = Engtoolup.MODID)
-public class AntiblastPlateHandler
-{
+public class AntiblastPlateHandler {
     //private static final Logger LOGGER = LogUtils.getLogger();
 
     private static final float DAMAGE_MULTIPLIER_WHILE_BLOCKING = 0.2f; // 80% damage reduction
@@ -34,16 +33,14 @@ public class AntiblastPlateHandler
     private static final Set<UUID> pendingKnockbackCancel = new HashSet<>();
 
     @SubscribeEvent
-    public static void onExplosionDamage(LivingHurtEvent event)
-    {
+    public static void onExplosionDamage(LivingHurtEvent event) {
 
-        if(!event.getSource().is(DamageTypeTags.IS_EXPLOSION))
+        if (!event.getSource().is(DamageTypeTags.IS_EXPLOSION))
             return;
 
         LivingEntity entity = event.getEntity();
 
-        if(!isBlockingWithAntiblastPlate(entity))
-        {
+        if (!isBlockingWithAntiblastPlate(entity)) {
             return;
         }
 
@@ -54,39 +51,36 @@ public class AntiblastPlateHandler
     }
 
     @SubscribeEvent
-    public static void onPlayerTick(TickEvent.PlayerTickEvent event)
-    {
-        if(event.phase!=TickEvent.Phase.END)
+    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        if (event.phase != TickEvent.Phase.END)
             return;
 
         Player player = event.player;
-        if(player.level().isClientSide())
+        if (player.level().isClientSide())
             return;
 
-        if(pendingKnockbackCancel.remove(player.getUUID()))
-        {
+        if (pendingKnockbackCancel.remove(player.getUUID())) {
             player.setDeltaMovement(Vec3.ZERO); // Failsafe as sometimes it did not work without this
         }
     }
 
-    private static boolean isBlockingWithAntiblastPlate(LivingEntity entity)
-    {
-        if(!entity.isBlocking()) {
+    private static boolean isBlockingWithAntiblastPlate(LivingEntity entity) {
+        if (!entity.isBlocking()) {
             return false;
         }
 
         ItemStack blockingStack = entity.getUseItem();
         boolean isShield = blockingStack.getItem() instanceof IEShieldItem;
         //LOGGER.info("[DEBUG]   -> isShield={}", isShield);
-        if(!isShield)
+        if (!isShield)
             return false;
 
         boolean isUpgradeableTool = blockingStack.getItem() instanceof IUpgradeableTool;
         //LOGGER.info("[DEBUG]   -> isUpgradeableTool={}", isUpgradeableTool);
-        if(!isUpgradeableTool)
+        if (!isUpgradeableTool)
             return false;
 
-        boolean hasPlate = ((IUpgradeableTool)blockingStack.getItem()).getUpgrades(blockingStack).getBoolean(AntiblastPlateItem.UPGRADE_KEY);
+        boolean hasPlate = ((IUpgradeableTool) blockingStack.getItem()).getUpgrades(blockingStack).getBoolean(AntiblastPlateItem.UPGRADE_KEY);
         //LOGGER.info("[DEBUG]   -> hasAntiblastPlateFlag={}", hasPlate);
         return hasPlate;
     }

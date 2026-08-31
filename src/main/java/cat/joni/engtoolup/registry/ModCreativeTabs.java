@@ -9,8 +9,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
-public class ModCreativeTabs
-{
+public class ModCreativeTabs {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Engtoolup.MODID);
 
@@ -31,7 +30,6 @@ public class ModCreativeTabs
                     })
                     .build());
 
-    private ModCreativeTabs()
-    {
+    private ModCreativeTabs() {
     }
 }

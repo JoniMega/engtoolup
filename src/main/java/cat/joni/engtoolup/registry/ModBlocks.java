@@ -9,8 +9,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-public class ModBlocks
-{
+public class ModBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Engtoolup.MODID);
 
     public static final RegistryObject<Block> STORAGE_DRILL = BLOCKS.register("storage_drill",
@@ -20,7 +19,6 @@ public class ModBlocks
                     .requiresCorrectToolForDrops()
                     .sound(SoundType.METAL)));
 
-    private ModBlocks()
-    {
+    private ModBlocks() {
     }
 }
