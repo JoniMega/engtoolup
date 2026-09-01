@@ -22,6 +22,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -36,6 +37,8 @@ public class FluidSensorHandler {
 
     private static int cooldown = 0;
 
+    static Set<BlockPos> highlightedPositions = Collections.emptySet();
+
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.END)
@@ -45,22 +48,25 @@ public class FluidSensorHandler {
         LocalPlayer player = mc.player;
         ClientLevel level = mc.level;
         if (player == null || level == null) {
-            cooldown = 0;
+            reset();
             return;
         }
 
         ItemStack drill = getDrillWithSensor(player);
         if (drill.isEmpty() || !(mc.hitResult instanceof BlockHitResult blockHit) || blockHit.getType() != HitResult.Type.BLOCK) {
-            cooldown = 0;
+            reset();
             return;
         }
+
+        Set<BlockPos> exposing = findLavaExposingPositions(level, player, blockHit, drill);
+        highlightedPositions = exposing;
 
         if (cooldown > 0) {
             cooldown--;
             return;
         }
 
-        if (isMiningAreaAdjacentToLava(level, player, blockHit, drill)) {
+        if (!exposing.isEmpty()) {
             BlockPos pos = blockHit.getBlockPos();
             level.playLocalSound(
                     pos.getX(), pos.getY(), pos.getZ(),
@@ -71,6 +77,11 @@ public class FluidSensorHandler {
         }
     }
 
+    private static void reset() {
+        cooldown = 0;
+        highlightedPositions = Collections.emptySet();
+    }
+
     private static void spawnNoteParticle(ClientLevel level, LocalPlayer player) {
         Vec3 origin = player.getEyePosition()
                 .add(player.getLookAngle().scale(0.4))
@@ -79,7 +90,7 @@ public class FluidSensorHandler {
         level.addParticle(ParticleTypes.NOTE, origin.x, origin.y, origin.z, noteColor, 0.0, 0.0);
     }
 
-    private static boolean isMiningAreaAdjacentToLava(
+    private static Set<BlockPos> findLavaExposingPositions(
             ClientLevel level, LocalPlayer player, BlockHitResult blockHit, ItemStack drill
     ) {
         Set<BlockPos> mined = new HashSet<>();
@@ -89,14 +100,17 @@ public class FluidSensorHandler {
         if (head.getItem() instanceof IDrillHead drillHead)
             mined.addAll(drillHead.getExtraBlocksDug(head, level, player, blockHit));
 
+        Set<BlockPos> exposing = new HashSet<>();
         for (BlockPos pos : mined)
             for (Direction dir : Direction.values()) {
                 BlockPos neighbor = pos.relative(dir);
-                if (!mined.contains(neighbor) && level.getFluidState(neighbor).is(FluidTags.LAVA))
-                    return true;
+                if (!mined.contains(neighbor) && level.getFluidState(neighbor).is(FluidTags.LAVA)) {
+                    exposing.add(pos);
+                    break;
+                }
             }
 
-        return false;
+        return exposing;
     }
 
     private static ItemStack getDrillWithSensor(LocalPlayer player) {
