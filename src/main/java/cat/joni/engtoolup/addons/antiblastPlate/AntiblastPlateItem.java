@@ -13,8 +13,8 @@ public class AntiblastPlateItem extends Item implements IUpgrade {
 
     public static final String UPGRADE_KEY = "engtoolup_Antiblast_plate";
 
-    public AntiblastPlateItem(Properties p_41383_) {
-        super(p_41383_);
+    public AntiblastPlateItem(Properties properties) {
+        super(properties.stacksTo(1));
     }
 
     @Override

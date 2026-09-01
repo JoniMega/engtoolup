@@ -18,7 +18,7 @@ public class LeadWeightItem extends Item implements IUpgrade {
     public static final String UPGRADE_KEY = "engtoolup_Lead_Weight";
 
     public LeadWeightItem(Properties p_41383_) {
-        super(p_41383_);
+        super(p_41383_.stacksTo(1));
     }
 
     @Override

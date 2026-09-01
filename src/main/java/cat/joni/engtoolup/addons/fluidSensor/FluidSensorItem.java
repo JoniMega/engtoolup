@@ -13,7 +13,7 @@ public class FluidSensorItem extends Item implements IUpgrade {
     public static final String UPGRADE_KEY = "engtoolup_fluid_sensor";
 
     public FluidSensorItem(Properties properties) {
-        super(properties);
+        super(properties.stacksTo(1));
     }
 
     @Override

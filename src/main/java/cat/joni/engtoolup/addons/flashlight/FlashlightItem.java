@@ -12,7 +12,7 @@ public class FlashlightItem extends Item implements IUpgrade {
     public static final String UPGRADE_KEY = "engtoolup_flashlight";
 
     public FlashlightItem(Properties properties) {
-        super(properties);
+        super(properties.stacksTo(1));
     }
 
     @Override
