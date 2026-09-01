@@ -18,7 +18,7 @@ public class ProspectorDrillHead extends DrillheadItem {
                 10.0f, // drillSpeed
                 2, // attack damage
                 10000, // max durability
-                new ResourceLocation("immersiveengineering", "item/drill_iron") // TO-DO new texture
+                new ResourceLocation("engtoolup", "item/drill_prospector") // TO-DO new texture
         ));
     }
 }

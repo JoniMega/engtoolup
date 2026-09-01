@@ -19,7 +19,7 @@ public class LeadDrillHead extends DrillheadItem {
                 24.0f, // drillSpeed
                 12, // attack damage
                 5000, // max durability
-                new ResourceLocation("immersiveengineering", "item/drill_iron") // TO-DO new texture
+                new ResourceLocation("engtoolup", "item/drill_lead") // TO-DO new texture
         ));
     }
 }
