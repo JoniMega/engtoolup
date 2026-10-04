@@ -20,6 +20,9 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * This feature I hope gets implemented into IE. My implementations is a long patchwork replicating what create does.
  *
@@ -43,6 +46,9 @@ public class ManualLinkHandler
     private static final int RETRY_INTERVAL_TICKS = 40; // 2 seconds
     private static final int MAX_INIT_ATTEMPTS = 10; // ~20 seconds of retrying, after the immediate first try
 
+    // Items we've already warned about, so a broken override doesn't spam the log on every tooltip refresh.
+    private static final Set<Object> WARNED = new HashSet<>();
+
     private static ItemStack hoveredStack = ItemStack.EMPTY;
     private static boolean manualInitSucceeded = false;
     private static boolean manualInitGaveUp = false;
@@ -57,26 +63,106 @@ public class ManualLinkHandler
     private static boolean pendingOpen = false;
     private static ManualLink pendingLink = null;
 
+    private static void warnOnce(Object key, String message, Object... args)
+    {
+        if(WARNED.add(key))
+            LOGGER.warn(message, args);
+    }
+
+    /**
+     * Checks that a link can safely be opened: its entry exists and its resolved page is inside the entry.
+     */
+    private static boolean isValidLink(ManualLink link)
+    {
+        if(link==null)
+            return false;
+        try
+        {
+            ManualEntry entry = link.getKey();
+            if(entry==null)
+                return false;
+            int pageCount = entry.getPageCount();
+            int page = link.getPage();
+            return page>=0&&page<pageCount;
+        }
+        catch(Exception e)
+        {
+            return false;
+        }
+    }
+
+    /**
+     * Never throws. Returns the override link if it is valid, otherwise IE's default link for the item, otherwise
+     * null (no link, so no tooltip line).
+     */
     static ManualLink resolveLink(ItemStack stack)
     {
-        if(!manualInitSucceeded)
-            return null;
+        try
+        {
+            if(!manualInitSucceeded||stack==null||stack.isEmpty())
+                return null;
 
-        ManualInstance manual = ManualHelper.getManual();
+            ManualInstance manual = ManualHelper.getManual();
+            if(manual==null)
+                return null;
 
-        ManualLinkOverrides.LinkOverride override = ManualLinkOverrides.getOverride(stack.getItem());
-        if(override!=null) {
-            ManualEntry overrideEntry = manual.getEntry(override.entry());
-            if(overrideEntry!=null) {
-                return new ManualLink(overrideEntry, null, override.page()-1);
+            ManualLinkOverrides.LinkOverride override = ManualLinkOverrides.getOverride(stack.getItem());
+            if(override!=null)
+            {
+                ManualLink overrideLink = buildOverrideLink(manual, stack, override);
+                if(overrideLink!=null)
+                    return overrideLink;
+                // Invalid override: fall through to IE's own link
             }
-            LOGGER.warn(
-                    "Manual_links override for {} points at unknown manual entry {}",
-                    ForgeRegistries.ITEMS.getKey(stack.getItem()), override.entry()
-            );
-        }
 
-        return manual.getManualLink(stack);
+            ManualLink link = manual.getManualLink(stack);
+            return isValidLink(link) ? link : null;
+        }
+        catch(Exception e)
+        {
+            warnOnce("resolve:"+stack, "Failed to resolve a manual link, ignoring it: {}", e.toString());
+            return null;
+        }
+    }
+
+    private static ManualLink buildOverrideLink(
+            ManualInstance manual, ItemStack stack, ManualLinkOverrides.LinkOverride override
+    )
+    {
+        Object itemKey = ForgeRegistries.ITEMS.getKey(stack.getItem());
+        try
+        {
+            if(override.entry()==null)
+                return null;
+            ManualEntry overrideEntry = manual.getEntry(override.entry());
+            if(overrideEntry==null)
+            {
+                warnOnce(
+                        "entry:"+itemKey,
+                        "Manual_links override for {} points at unknown manual entry {}, using default link",
+                        itemKey, override.entry()
+                );
+                return null;
+            }
+
+            ManualLink link = new ManualLink(overrideEntry, null, override.page()-1);
+            if(!isValidLink(link))
+            {
+                warnOnce(
+                        "page:"+itemKey,
+                        "Manual_links override for {} uses page {} which is outside entry {}, using default link",
+                        itemKey, override.page(), override.entry()
+                );
+                return null;
+            }
+            return link;
+        }
+        catch(Exception e)
+        {
+            warnOnce("override:"+itemKey, "Manual_links override for {} is unusable ({}), using default link",
+                    itemKey, e.toString());
+            return null;
+        }
     }
 
     /**
@@ -171,9 +257,6 @@ public class ManualLinkHandler
         }
         else
         {
-            // Likely just IE/the integrated server not being fully ready yet -- log briefly and let the next
-            // retry (in RETRY_INTERVAL_TICKS) try again. Include the full stack trace on the very first failure
-            // only, so we still capture diagnostics without spamming the log on every retry.
             String message =
                     "Attempt "+manualInitAttempts+"/"+MAX_INIT_ATTEMPTS+
                             " to initialize the Engineer's Manual for page-linking failed: "+reason+
@@ -194,6 +277,19 @@ public class ManualLinkHandler
 
     @SubscribeEvent
     public static void onTooltip(ItemTooltipEvent event)
+    {
+        try
+        {
+            handleTooltip(event);
+        }
+        catch(Exception e)
+        {
+            isHolding = false;
+            warnOnce("tooltip", "Failed to add the manual tooltip, skipping: {}", e.toString());
+        }
+    }
+
+    private static void handleTooltip(ItemTooltipEvent event)
     {
         ItemStack stack = event.getItemStack();
         hoveredStack = stack;
@@ -242,6 +338,19 @@ public class ManualLinkHandler
     @SubscribeEvent
     public static void onScreenKeyPressed(ScreenEvent.KeyPressed.Pre event)
     {
+        try
+        {
+            handleKeyPressed(event);
+        }
+        catch(Exception e)
+        {
+            isHolding = false;
+            warnOnce("keypress", "Failed to handle the manual keybind, ignoring: {}", e.toString());
+        }
+    }
+
+    private static void handleKeyPressed(ScreenEvent.KeyPressed.Pre event)
+    {
         if(!EngtoolupKeybinds.OPEN_MANUAL_ENTRY.matches(event.getKeyCode(), event.getScanCode()))
             return;
 
@@ -276,17 +385,25 @@ public class ManualLinkHandler
         boolean levelPresent = Minecraft.getInstance().level!=null;
         if(levelPresent && !wasLevelPresent)
         {
-            // (Re)joined a world -- reset retry state so a fresh world gets its own full set of attempts instead
-            // of inheriting a previous world's "gave up" state.
             manualInitSucceeded = false;
             manualInitGaveUp = false;
             manualInitAttempts = 0;
+            WARNED.clear();
             ticksSinceLastAttempt = RETRY_INTERVAL_TICKS; // attempt immediately on the first tick in-world
         }
         wasLevelPresent = levelPresent;
 
         if(levelPresent)
-            ensureManualIndexed();
+        {
+            try
+            {
+                ensureManualIndexed();
+            }
+            catch(Exception e)
+            {
+                warnOnce("tick-init", "Unexpected error while initialising manual links: {}", e.toString());
+            }
+        }
 
         if(!pendingOpen)
             return;
@@ -303,13 +420,29 @@ public class ManualLinkHandler
     static void openLink(ManualLink link)
     {
         try {
+            if(!isValidLink(link))
+            {
+                LOGGER.warn("Refusing to open an invalid manual link");
+                return;
+            }
+
             ManualInstance manual = ManualHelper.getManual();
+            if(manual==null)
+                return;
             var screen = manual.getGui();
             if(screen==null)
                 return;
 
-            Minecraft.getInstance().setScreen(screen);
-            link.changePage(screen, false);
+            Minecraft mc = Minecraft.getInstance();
+            var previous = mc.screen;
+            mc.setScreen(screen);
+            try {
+                link.changePage(screen, false);
+            } catch(Exception e) {
+                // Don't leave the player stuck on a half-initialised manual screen.
+                mc.setScreen(previous);
+                throw e;
+            }
         } catch(Exception e) {
             LOGGER.error("Failed to open the Engineer's Manual to a specific page ", e);
         }
