@@ -24,11 +24,11 @@
 
 ### QoL
 
-- **Inspect any item** - Any item that has a presence in the IE's manual, will link to the specific page when the player holds the keybind while hovering, with teh cursor, the item.
+- **Inspect any item** - Any item that has a presence in the IE's manual, will link to the specific page when the player holds the keybind while hovering, with the cursor, the item. This includes other IE addons.
 
 ## License
 
-See [LICENSE](LICENSE) for details.
+MIT License. Feel free to modify, fork, and make cupcakes with this mod. 
 
 ## Author
 
